@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "657756231074",
+    "project_id": "shareride-bece5",
+    "storage_bucket": "shareride-bece5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657756231074:android:ecf2fa253576d50848cefb",
+        "android_client_info": {
+          "package_name": "com.example.share_ride_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAI9gx6Pqy9kQ3lRL80CCI1VNFBHoXxg3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
