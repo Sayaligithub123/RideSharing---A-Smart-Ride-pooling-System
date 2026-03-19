@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # share_ride_app
 
 A new Flutter project.
@@ -14,3 +15,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# RideSharing---A-Smart-Ride-pooling-System
+An application that allows passengers traveling in the same direction to share a ride in real time.
+>>>>>>> 98cc126b18f035e43c1eede0a8a2fef3a7a8a47f
