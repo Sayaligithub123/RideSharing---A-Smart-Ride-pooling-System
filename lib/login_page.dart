@@ -20,9 +20,11 @@ class _LoginPageState extends State<LoginPage> {
       },
 
       verificationFailed: (FirebaseAuthException e) {
-        print(e.message);
+        print("ERROR: ${e.message}");
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.message ?? "Error")));
       },
-
       codeSent: (String verificationId, int? resendToken) {
         Navigator.push(
           context,
@@ -58,7 +60,13 @@ class _LoginPageState extends State<LoginPage> {
 
             SizedBox(height: 20),
 
-            ElevatedButton(onPressed: sendOTP, child: Text("Send OTP")),
+            ElevatedButton(
+              onPressed: () {
+                print("Button Clicked");
+                sendOTP();
+              },
+              child: Text("Send OTP"),
+            ),
           ],
         ),
       ),
