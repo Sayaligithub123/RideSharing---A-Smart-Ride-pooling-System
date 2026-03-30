@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'role_selection.dart';
 
 class OtpPage extends StatefulWidget {
   final String verificationId;
@@ -33,9 +34,11 @@ class _OtpPageState extends State<OtpPage> {
     try {
       await auth.signInWithCredential(credential);
 
-      ScaffoldMessenger.of(
+      /// ✅ NAVIGATE HERE AFTER SUCCESS
+      Navigator.pushReplacement(
         context,
-      ).showSnackBar(SnackBar(content: Text("Login Successful")));
+        MaterialPageRoute(builder: (_) => RoleSelectionPage()),
+      );
     } catch (e) {
       ScaffoldMessenger.of(
         context,
