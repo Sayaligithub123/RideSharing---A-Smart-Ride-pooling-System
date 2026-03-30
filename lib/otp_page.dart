@@ -11,45 +11,142 @@ class OtpPage extends StatefulWidget {
 }
 
 class _OtpPageState extends State<OtpPage> {
-  final otpController = TextEditingController();
+  final List<TextEditingController> controllers = List.generate(
+    6,
+    (_) => TextEditingController(),
+  );
+
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  String getOtp() {
+    return controllers.map((e) => e.text).join();
+  }
+
   void verifyOTP() async {
+    String otp = getOtp();
+
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
       verificationId: widget.verificationId,
-      smsCode: otpController.text,
+      smsCode: otp,
     );
 
-    await auth.signInWithCredential(credential);
+    try {
+      await auth.signInWithCredential(credential);
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Login Successful")));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Login Successful")));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Invalid OTP")));
+    }
+  }
+
+  Widget otpBox(int index) {
+    return SizedBox(
+      width: 45,
+      child: TextField(
+        controller: controllers[index],
+        keyboardType: TextInputType.number,
+        maxLength: 1,
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        decoration: InputDecoration(
+          counterText: "",
+          filled: true,
+          fillColor: Color(0xFFF9FAFB),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        onChanged: (value) {
+          if (value.isNotEmpty && index < 5) {
+            FocusScope.of(context).nextFocus();
+          }
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Verify OTP")),
+      backgroundColor: Colors.white,
 
       body: Padding(
-        padding: EdgeInsets.all(20),
-
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: otpController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: "Enter OTP",
-                border: OutlineInputBorder(),
+            SizedBox(height: 60),
+
+            /// BACK BUTTON
+            Align(
+              alignment: Alignment.centerLeft,
+              child: CircleAvatar(
+                backgroundColor: Color(0xFFF3F4F6),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.pop(context),
+                ),
               ),
+            ),
+
+            SizedBox(height: 30),
+
+            /// ICON
+            Text("📱", style: TextStyle(fontSize: 40)),
+
+            SizedBox(height: 15),
+
+            /// TITLE
+            Text(
+              "Verify your number",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+
+            SizedBox(height: 8),
+
+            Text(
+              "We sent a 6-digit code",
+              style: TextStyle(color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
+
+            SizedBox(height: 25),
+
+            /// OTP BOXES
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(6, (index) => otpBox(index)),
             ),
 
             SizedBox(height: 20),
 
-            ElevatedButton(onPressed: verifyOTP, child: Text("Verify OTP")),
+            /// RESEND TEXT
+            Text(
+              "Didn't receive? Resend in 45s",
+              style: TextStyle(color: Colors.grey),
+            ),
+
+            SizedBox(height: 25),
+
+            /// BUTTON
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: verifyOTP,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF1A9E6E),
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                child: Text(
+                  "Verify & Continue →",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
           ],
         ),
       ),
