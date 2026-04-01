@@ -8,7 +8,7 @@ class DriverHomePage extends StatelessWidget {
 
       appBar: AppBar(
         title: Text("Driver Home"),
-        backgroundColor: Color(0xFF1A9E6E),
+        backgroundColor: Color.fromARGB(255, 25, 220, 149),
       ),
 
       body: Padding(
