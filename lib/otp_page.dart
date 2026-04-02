@@ -33,11 +33,12 @@ class _OtpPageState extends State<OtpPage> {
 
     try {
       await auth.signInWithCredential(credential);
+      String phone = auth.currentUser!.phoneNumber!;
 
       /// ✅ NAVIGATE HERE AFTER SUCCESS
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => RoleSelectionPage()),
+        MaterialPageRoute(builder: (_) => RoleSelectionPage(phone: phone)),
       );
     } catch (e) {
       ScaffoldMessenger.of(

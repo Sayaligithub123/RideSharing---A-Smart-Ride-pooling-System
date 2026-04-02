@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'profile_setup.dart'; // make sure path is correct
+import 'profile_setup.dart';
 
 class RoleSelectionPage extends StatelessWidget {
+  final String phone; // ✅ ADD THIS
+
+  RoleSelectionPage({required this.phone}); // ✅ ADD THIS
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +24,6 @@ class RoleSelectionPage extends StatelessWidget {
           children: [
             SizedBox(height: 20),
 
-            /// TITLE
             Text(
               "How will you use RouteShare?",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -35,7 +38,7 @@ class RoleSelectionPage extends StatelessWidget {
 
             SizedBox(height: 30),
 
-            /// 🚶 PASSENGER CARD
+            /// 🚶 PASSENGER
             roleCard(
               context,
               icon: "🧍",
@@ -46,7 +49,10 @@ class RoleSelectionPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => ProfileSetupPage(role: "passenger"),
+                    builder: (_) => ProfileSetupPage(
+                      role: "passenger",
+                      phone: phone, // ✅ FIXED
+                    ),
                   ),
                 );
               },
@@ -54,7 +60,7 @@ class RoleSelectionPage extends StatelessWidget {
 
             SizedBox(height: 15),
 
-            /// 🚗 DRIVER CARD
+            /// 🚗 DRIVER
             roleCard(
               context,
               icon: "🚗",
@@ -65,22 +71,20 @@ class RoleSelectionPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => ProfileSetupPage(role: "driver"),
+                    builder: (_) => ProfileSetupPage(
+                      role: "driver",
+                      phone: phone, // ✅ FIXED
+                    ),
                   ),
                 );
               },
             ),
-
-            SizedBox(height: 15),
-
-            /// 🔄 BOTH (optional)
           ],
         ),
       ),
     );
   }
 
-  /// 🔹 REUSABLE CARD WIDGET
   Widget roleCard(
     BuildContext context, {
     required String icon,
@@ -101,9 +105,7 @@ class RoleSelectionPage extends StatelessWidget {
         child: Row(
           children: [
             Text(icon, style: TextStyle(fontSize: 28)),
-
             SizedBox(width: 15),
-
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -111,7 +113,6 @@ class RoleSelectionPage extends StatelessWidget {
                   title,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-
                 Text(subtitle, style: TextStyle(color: Colors.grey)),
               ],
             ),

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'passenger_homepage.dart';
 import 'driver_homepage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ProfileSetupPage extends StatefulWidget {
-  final String role; // ✅ ADD THIS
+  final String role;
+  final String phone; // ✅ ADD PHONE
 
-  ProfileSetupPage({required this.role});
+  ProfileSetupPage({required this.role, required this.phone});
+
   @override
   _ProfileSetupPageState createState() => _ProfileSetupPageState();
 }
@@ -14,6 +18,50 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final emergencyController = TextEditingController();
+
+  /// ✅ SAVE PROFILE FUNCTION
+  void saveProfile() async {
+    try {
+      final response = await http.post(
+        Uri.parse("http://127.0.0.1:5000/api/users/save-profile"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "phone": widget.phone,
+          "name": nameController.text,
+          "email": emailController.text,
+          "emergency": emergencyController.text,
+          "role": widget.role,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Profile saved successfully");
+
+        /// ✅ NAVIGATION AFTER SAVE
+        if (widget.role == "driver") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => DriverHomePage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => PassengerHomePage()),
+          );
+        }
+      } else {
+        print("Error: ${response.body}");
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Failed to save profile")));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Server error")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +99,11 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                     decoration: BoxDecoration(
                       color: Color(0xFFE6F7F1),
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Color(0xFF1A9E6E),
-                        width: 2,
-                        style: BorderStyle.solid,
-                      ),
+                      border: Border.all(color: Color(0xFF1A9E6E), width: 2),
                     ),
                     child: Icon(Icons.add, size: 35, color: Color(0xFF1A9E6E)),
                   ),
-
                   SizedBox(height: 8),
-
                   Text(
                     "Upload photo",
                     style: TextStyle(
@@ -86,7 +128,6 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
               SizedBox(height: 20),
 
               Divider(),
-
               SizedBox(height: 10),
 
               /// 🔒 PRIVACY TEXT
@@ -105,23 +146,11 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
 
               Spacer(),
 
-              /// 🚀 BUTTON
+              /// 🚀 BUTTON (UPDATED)
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (widget.role == "driver") {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => DriverHomePage()),
-                      );
-                    } else {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => PassengerHomePage()),
-                      );
-                    }
-                  },
+                  onPressed: saveProfile, // ✅ IMPORTANT CHANGE
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF1A9E6E),
                     padding: EdgeInsets.symmetric(vertical: 16),
