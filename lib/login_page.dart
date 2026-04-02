@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'otp_page.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
