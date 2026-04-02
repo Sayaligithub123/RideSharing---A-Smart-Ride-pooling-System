@@ -21,6 +21,8 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
 
   /// ✅ SAVE PROFILE FUNCTION
   void saveProfile() async {
+    print("Sending request...");
+
     try {
       final response = await http.post(
         Uri.parse("http://127.0.0.1:5000/api/users/save-profile"),
@@ -34,10 +36,10 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
         }),
       );
 
-      if (response.statusCode == 200) {
-        print("Profile saved successfully");
+      print("STATUS: ${response.statusCode}");
+      print("BODY: ${response.body}");
 
-        /// ✅ NAVIGATION AFTER SAVE
+      if (response.statusCode == 200) {
         if (widget.role == "driver") {
           Navigator.pushReplacement(
             context,
@@ -46,20 +48,16 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
         } else {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => PassengerHomePage()),
+            MaterialPageRoute(
+              builder: (_) => PassengerHomePage(phone: widget.phone),
+            ),
           );
         }
       } else {
-        print("Error: ${response.body}");
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Failed to save profile")));
+        print("❌ Server Error");
       }
     } catch (e) {
-      print("Exception: $e");
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Server error")));
+      print("❌ Exception: $e");
     }
   }
 
