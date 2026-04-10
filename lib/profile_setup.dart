@@ -23,6 +23,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
   final emailController = TextEditingController();
   final emergencyController = TextEditingController();
 
+<<<<<<< HEAD
   bool isLoading = false;
 
   /// ✅ SAVE PROFILE FUNCTION
@@ -86,6 +87,67 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Connection failed")),
       );
+=======
+  bool _isLoading = false;
+
+  void saveProfile() async {
+    if (nameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Please enter your name")));
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse("http://10.47.117.100:5000/api/users/save-profile"),
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode({
+              "phone": widget.phone,
+              "name": nameController.text,
+              "email": emailController.text,
+              "emergency": emergencyController.text,
+              "role": widget.role,
+            }),
+          )
+          .timeout(
+            Duration(seconds: 10),
+            onTimeout: () {
+              throw Exception("Connection timed out. Check your server.");
+            },
+          );
+
+      if (response.statusCode == 200) {
+        if (widget.role == "driver") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => DriverHomePage(phone: widget.phone), // ✅ FIXED
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => PassengerHomePage(phone: widget.phone),
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Server error: ${response.statusCode}")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+    } finally {
+      setState(() => _isLoading = false);
+>>>>>>> 8cd0ed2 (updated driver module)
     }
   }
 
@@ -118,6 +180,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
 
                 const SizedBox(height: 20),
 
+<<<<<<< HEAD
                 /// 👤 PROFILE IMAGE
                 Column(
                   children: const [
@@ -192,6 +255,64 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                                 fontWeight: FontWeight.bold),
                           ),
                   ),
+=======
+              /// 🧾 INPUT FIELDS
+              inputField("Full name", nameController),
+              SizedBox(height: 15),
+              inputField("Email (optional)", emailController),
+              SizedBox(height: 15),
+              inputField("Emergency contact", emergencyController),
+
+              SizedBox(height: 20),
+
+              Divider(),
+              SizedBox(height: 10),
+
+              /// 🔒 PRIVACY TEXT
+              Row(
+                children: [
+                  Icon(Icons.lock, size: 16, color: Colors.grey),
+                  SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      "Your data is encrypted and never shared without consent",
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ),
+                ],
+              ),
+
+              Spacer(),
+
+              /// 🚀 BUTTON
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : saveProfile,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF1A9E6E),
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: _isLoading
+                      ? SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(
+                          "Complete Setup →",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+>>>>>>> 8cd0ed2 (updated driver module)
                 ),
 
                 const SizedBox(height: 20),
@@ -203,7 +324,6 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
     );
   }
 
-  /// 🔹 INPUT FIELD WIDGET
   Widget inputField(String hint, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
