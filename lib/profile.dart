@@ -23,7 +23,9 @@ class _ProfilePageState extends State<ProfilePage> {
   /// 🔥 FETCH USER DATA
   void fetchUser() async {
     final response = await http.get(
-      Uri.parse("http://10.47.117.100:5000/api/users/get-user/${widget.phone}"),
+      Uri.parse(
+        "http://172.23.112.100:5000/api/users/get-user/${widget.phone}",
+      ),
     );
 
     if (response.statusCode == 200) {
