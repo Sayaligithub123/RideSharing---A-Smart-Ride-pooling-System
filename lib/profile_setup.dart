@@ -34,7 +34,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
     try {
       final response = await http
           .post(
-            Uri.parse("http://172.23.112.100:5000/api/users/save-profile"),
+            Uri.parse("http://192.168.174.81:5000/api/users/save-profile"),
             headers: {"Content-Type": "application/json"},
             body: jsonEncode({
               "phone": widget.phone,
