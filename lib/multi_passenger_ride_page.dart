@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'driver_trip_summary_page.dart';
+import 'ride_detail_page.dart';
 
 class MultiPassengerRidePage extends StatelessWidget {
   final String phone;

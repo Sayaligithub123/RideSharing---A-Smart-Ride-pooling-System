@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'profile.dart';
+import 'route_input_page.dart';
 
 class PassengerHomePage extends StatefulWidget {
   final String phone;
@@ -64,31 +65,39 @@ class _PassengerHomePageState extends State<PassengerHomePage> {
                 Center(child: Text("🗺 Map View")),
 
                 /// SEARCH BAR
-                Positioned(
-                  top: 40,
-                  left: 16,
-                  right: 16,
-                  child: Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(color: Colors.black12, blurRadius: 6),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.search, color: Colors.grey),
-                        SizedBox(width: 10),
-                        Text(
-                          "Where are you going?",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                /// SEARCH BAR
+Positioned(
+  top: 40,
+  left: 16,
+  right: 16,
+  child: Container(
+    padding: EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: [
+        BoxShadow(color: Colors.black12, blurRadius: 6),
+      ],
+    ),
+
+    /// 🔥 UPDATED PART (CLICKABLE SEARCH)
+    child: GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/route');
+      },
+      child: Row(
+        children: [
+          Icon(Icons.search, color: Colors.grey),
+          SizedBox(width: 10),
+          Text(
+            "Where are you going?",
+            style: TextStyle(color: Colors.grey),
+          ),
+        ],
+      ),
+    ),
+  ),
+),
 
                 /// RIDES NEARBY BADGE
                 Positioned(
